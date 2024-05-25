@@ -10,9 +10,9 @@ public class Adventurer {
     private int treasuresCollected;
     private final ObstacleDetector obstacleDetector;
     private final TreasureManager treasureManager;
-    private final Map map;
+    private final TreasureMap treasureMap;
 
-    public Adventurer(String name, int x, int y, String orientation, String sequence, ObstacleDetector obstacleDetector, TreasureManager treasureManager, Map map) {
+    public Adventurer(String name, int x, int y, String orientation, String sequence, ObstacleDetector obstacleDetector, TreasureManager treasureManager, TreasureMap treasureMap) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -20,7 +20,7 @@ public class Adventurer {
         this.sequence = sequence;
         this.obstacleDetector = obstacleDetector;
         this.treasureManager = treasureManager;
-        this.map = map;
+        this.treasureMap = treasureMap;
         this.treasuresCollected = 0;
         this.sequenceIndex = 0;
     }
@@ -68,14 +68,15 @@ public class Adventurer {
                 break;
         }
 
-        if (isValidCoordinate(newX, newY)) {
+
+        if (treasureMap.isValidMove(newX, newY) && !treasureMap.isSquareOccupied(newX, newY)) {
+            treasureMap.removeAdventurerPosition(this);
+
             x = newX;
             y = newY;
-        }
-    }
 
-    private boolean isValidCoordinate(int newX, int newY) {
-        return newX >= 0 && newX < map.getWidth() && newY >= 0 && newY < map.getHeight();
+            treasureMap.addAdventurerPosition(this);
+        }
     }
 
 

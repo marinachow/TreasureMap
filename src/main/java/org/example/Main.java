@@ -44,8 +44,8 @@ public class Main {
                         break;
                     case "A":
                         Object firstObject = mapObjects.get(0);
-                        if (firstObject instanceof Map) {
-                            mapObjects.add(parseAdventurer(tokens, mountains, treasures, (Map) firstObject));
+                        if (firstObject instanceof TreasureMap) {
+                            mapObjects.add(parseAdventurer(tokens, mountains, treasures, (TreasureMap) firstObject));
                         } else {
                             System.err.println("Invalid input: " + firstObject + " must be a map");
                         }
@@ -62,10 +62,10 @@ public class Main {
         }
     }
 
-    private static Map parseMap(String[] tokens) {
+    private static TreasureMap parseMap(String[] tokens) {
         int mapWidth = Integer.parseInt(tokens[1].trim());
         int mapHeight = Integer.parseInt(tokens[2].trim());
-        return new Map(mapWidth, mapHeight);
+        return new TreasureMap(mapWidth, mapHeight);
     }
 
     private static Mountain parseMountain(String[] tokens) {
@@ -81,7 +81,7 @@ public class Main {
         return new Treasure(treasureX, treasureY, numTreasures);
     }
 
-    private static Adventurer parseAdventurer(String[] tokens, List<Mountain> mountains, List<Treasure> treasures, Map map) {
+    private static Adventurer parseAdventurer(String[] tokens, List<Mountain> mountains, List<Treasure> treasures, TreasureMap treasureMap) {
         String adventurerName = tokens[1].trim();
         int adventurerX = Integer.parseInt(tokens[2].trim());
         int adventurerY = Integer.parseInt(tokens[3].trim());
@@ -90,7 +90,7 @@ public class Main {
         ObstacleDetector obstacleDetector = new MountainObstacleDetector(mountains);
         TreasureManager treasureManager = new SimpleTreasureManager(treasures);
         Adventurer adventurer = new Adventurer(adventurerName, adventurerX, adventurerY, orientation,
-                movementSequence, obstacleDetector, treasureManager, map);
+                movementSequence, obstacleDetector, treasureManager, treasureMap);
         while (!adventurer.hasFinishedSequence()) {
             adventurer.executeNextMovement();
         }

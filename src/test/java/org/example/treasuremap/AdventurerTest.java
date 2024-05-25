@@ -16,20 +16,19 @@ public class AdventurerTest {
     ObstacleDetector obstacleDetector;
     @Mock
     TreasureManager treasureManager;
-    @Mock
-    Map map;
+
+    private TreasureMap treasureMap;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        when(map.getWidth()).thenReturn(5);
-        when(map.getHeight()).thenReturn(5);
+        treasureMap = new TreasureMap(5, 5);
     }
 
     @Test
     public void testAdventurerCreation() {
         Adventurer adventurer = new Adventurer("John", 0, 0, "N", "AADADA",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         assertEquals("John", adventurer.getName());
         assertEquals(0, adventurer.getX());
         assertEquals(0, adventurer.getY());
@@ -40,9 +39,8 @@ public class AdventurerTest {
     @Test
     public void testMoveForward() {
         Adventurer adventurer = new Adventurer("John", 1, 2, "S", "A",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
-        System.out.println(map);
         assertEquals(1, adventurer.getX());
         assertEquals(3, adventurer.getY());
     }
@@ -50,7 +48,7 @@ public class AdventurerTest {
     @Test
     public void testTurnLeft() {
         Adventurer adventurer = new Adventurer("John", 0, 0, "N", "G",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
         assertEquals("W", adventurer.getOrientation());
     }
@@ -58,7 +56,7 @@ public class AdventurerTest {
     @Test
     public void testTurnRight() {
         Adventurer adventurer = new Adventurer("John", 0, 0, "N", "D",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
         assertEquals("E", adventurer.getOrientation());
     }
@@ -66,7 +64,7 @@ public class AdventurerTest {
     @Test
     public void testExecuteEntireSequence() {
         Adventurer adventurer = new Adventurer("Lara", 1, 1, "S", "AADADAGGA",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         while (!adventurer.hasFinishedSequence()) {
             adventurer.executeNextMovement();
         }
@@ -80,7 +78,7 @@ public class AdventurerTest {
         when(obstacleDetector.hasObstacleAhead(anyInt(), anyInt(), anyString())).thenReturn(false);
 
         Adventurer adventurer = new Adventurer("John", 1, 2, "N", "A",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
 
         assertEquals(1, adventurer.getX());
@@ -93,7 +91,7 @@ public class AdventurerTest {
         when(obstacleDetector.hasObstacleAhead(anyInt(), anyInt(), anyString())).thenReturn(true);
 
         Adventurer adventurer = new Adventurer("John", 0, 0, "N", "A",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
 
         assertEquals(0, adventurer.getX());
@@ -106,10 +104,20 @@ public class AdventurerTest {
         when(obstacleDetector.hasObstacleAhead(anyInt(), anyInt(), anyString())).thenReturn(false);
 
         Adventurer adventurer = new Adventurer("John", 0, 0, "N", "A",
-                obstacleDetector, treasureManager, map);
+                obstacleDetector, treasureManager, treasureMap);
         adventurer.executeNextMovement();
 
         assertEquals(0, adventurer.getX());
         assertEquals(0, adventurer.getY());
+    }
+
+    @Test
+    public void testMoveForward_AvoidCollision() {
+        Adventurer adventurer1 = new Adventurer("John", 1, 1, "S", "A", obstacleDetector, treasureManager, treasureMap);
+        Adventurer adventurer2 = new Adventurer("Alice", 1, 3, "N", "A", obstacleDetector, treasureManager, treasureMap);
+        adventurer1.executeNextMovement();
+        adventurer2.executeNextMovement();
+
+        assertFalse(adventurer1.getX() == adventurer2.getX() && adventurer1.getY() == adventurer2.getY());
     }
 }

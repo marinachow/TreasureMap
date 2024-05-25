@@ -34,7 +34,7 @@ public class IntegrationTest {
         List<Object> mapObjects = new ArrayList<>();
         List<Mountain> mountains = new ArrayList<>();
         List<Treasure> treasures = new ArrayList<>();
-        Map map = new Map(0, 0);
+        TreasureMap treasureMap = new TreasureMap(0, 0);
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath.toFile()))) {
             String line;
@@ -49,9 +49,9 @@ public class IntegrationTest {
                     case "C":
                         int mapWidth = Integer.parseInt(tokens[1].trim());
                         int mapHeight = Integer.parseInt(tokens[2].trim());
-                        map.setWidth(mapWidth);
-                        map.setHeight(mapHeight);
-                        mapObjects.add(map);
+                        treasureMap.setWidth(mapWidth);
+                        treasureMap.setHeight(mapHeight);
+                        mapObjects.add(treasureMap);
                         break;
                     case "M":
                         int mountainX = Integer.parseInt(tokens[1].trim());
@@ -69,7 +69,7 @@ public class IntegrationTest {
                         mapObjects.add(treasure);
                         break;
                     case "A":
-                        Adventurer adventurer = createAndMoveAdventurer(tokens, mountains, treasures, map);
+                        Adventurer adventurer = createAndMoveAdventurer(tokens, mountains, treasures, treasureMap);
                         mapObjects.add(adventurer);
                         break;
                     default:
@@ -108,7 +108,7 @@ public class IntegrationTest {
         }
     }
 
-    private Adventurer createAndMoveAdventurer(String[] tokens, List<Mountain> mountains, List<Treasure> treasures, Map map) {
+    private Adventurer createAndMoveAdventurer(String[] tokens, List<Mountain> mountains, List<Treasure> treasures, TreasureMap treasureMap) {
         String adventurerName = tokens[1].trim();
         int adventurerX = Integer.parseInt(tokens[2].trim());
         int adventurerY = Integer.parseInt(tokens[3].trim());
@@ -117,7 +117,7 @@ public class IntegrationTest {
         ObstacleDetector obstacleDetector = new MountainObstacleDetector(mountains);
         TreasureManager treasureManager = new SimpleTreasureManager(treasures);
         Adventurer adventurer = new Adventurer(adventurerName, adventurerX, adventurerY, orientation,
-                movementSequence, obstacleDetector, treasureManager, map);
+                movementSequence, obstacleDetector, treasureManager, treasureMap);
         while (!adventurer.hasFinishedSequence()) {
             adventurer.executeNextMovement();
         }
@@ -126,12 +126,12 @@ public class IntegrationTest {
 
     @Test
     public void testAdventurerBlockedByMountain() {
-        Map map = new Map(3, 3);
+        TreasureMap treasureMap = new TreasureMap(3, 3);
         Mountain mountain = new Mountain(0, 1);
         List<Mountain> mountains = new ArrayList<>();
         mountains.add(mountain);
 
-        Adventurer adventurer = new Adventurer("John", 0, 0, "S", "A", new MountainObstacleDetector(mountains), null, map);
+        Adventurer adventurer = new Adventurer("John", 0, 0, "S", "A", new MountainObstacleDetector(mountains), null, treasureMap);
 
         adventurer.executeNextMovement();
 
