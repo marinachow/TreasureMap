@@ -1,28 +1,26 @@
 package org.example.treasuremap;
 
-public class Adventurer {
+public class Adventurer extends MapObject {
     private final String name;
-    private int x;
-    private int y;
     private String orientation;
     private final String sequence;
-    private int sequenceIndex;
     private int treasuresCollected;
+    private int sequenceIndex;
     private final ObstacleDetector obstacleDetector;
     private final TreasureManager treasureManager;
     private final TreasureMap treasureMap;
 
-    public Adventurer(String name, int x, int y, String orientation, String sequence, ObstacleDetector obstacleDetector, TreasureManager treasureManager, TreasureMap treasureMap) {
+    public Adventurer(String name, int x, int y, String orientation, String sequence,
+                      ObstacleDetector obstacleDetector, TreasureManager treasureManager, TreasureMap treasureMap) {
+        super(x, y);
         this.name = name;
-        this.x = x;
-        this.y = y;
         this.orientation = orientation;
         this.sequence = sequence;
+        this.treasuresCollected = 0;
+        this.sequenceIndex = 0;
         this.obstacleDetector = obstacleDetector;
         this.treasureManager = treasureManager;
         this.treasureMap = treasureMap;
-        this.treasuresCollected = 0;
-        this.sequenceIndex = 0;
     }
 
     public String getName() {

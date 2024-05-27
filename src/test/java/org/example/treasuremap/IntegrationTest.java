@@ -1,6 +1,6 @@
 package org.example.treasuremap;
 
-import org.example.Main;
+import org.example.main.Main;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

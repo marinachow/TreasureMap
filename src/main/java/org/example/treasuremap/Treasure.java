@@ -1,13 +1,10 @@
 package org.example.treasuremap;
 
-public class Treasure {
-    private int x;
-    private int y;
+public class Treasure extends MapObject {
     private int numberOfTreasures;
 
     public Treasure(int x, int y, int numberOfTreasures) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.numberOfTreasures = numberOfTreasures;
     }
 

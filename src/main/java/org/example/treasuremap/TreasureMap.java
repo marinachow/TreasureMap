@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TreasureMap {
-    private int width;
-    private int height;
+public class TreasureMap extends MapObject {
+    private final int width;
+    private final int height;
     private final Map<String, List<Adventurer>> adventurerPositions;
 
     public TreasureMap(int width, int height) {
+        super(0, 0);
         this.width = width;
         this.height = height;
         this.adventurerPositions = new HashMap<>();
@@ -48,16 +49,8 @@ public class TreasureMap {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     @Override

@@ -1,12 +1,8 @@
 package org.example.treasuremap;
 
-public class Mountain {
-    private int x;
-    private int y;
-
+public class Mountain extends MapObject {
     public Mountain(int x, int y) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
     }
 
     public int getX() {
