@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -120,4 +123,19 @@ public class AdventurerTest {
 
         assertFalse(adventurer1.getX() == adventurer2.getX() && adventurer1.getY() == adventurer2.getY());
     }
+
+    @Test
+    public void testTreasureCollectionAfterMovements() {
+        Treasure treasure = new Treasure(1, 1, 2);
+        List<Treasure> treasures = new ArrayList<>();
+        treasures.add(treasure);
+        TreasureManager treasureManager = new SimpleTreasureManager(treasures);
+
+        Adventurer adventurer = new Adventurer("John", 1, 2, "N", "A", obstacleDetector, treasureManager, treasureMap);
+
+        adventurer.executeNextMovement();
+        assertEquals(1, treasure.getNumberOfTreasures());
+        assertEquals(1, adventurer.getTreasuresCollected());
+    }
+
 }

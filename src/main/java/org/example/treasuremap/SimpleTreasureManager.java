@@ -3,7 +3,7 @@ package org.example.treasuremap;
 import java.util.List;
 
 public class SimpleTreasureManager implements TreasureManager {
-    private List<Treasure> treasures;
+    private final List<Treasure> treasures;
 
     public SimpleTreasureManager(List<Treasure> treasures) {
         this.treasures = treasures;

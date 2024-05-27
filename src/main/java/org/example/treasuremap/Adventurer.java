@@ -49,6 +49,10 @@ public class Adventurer {
         return sequenceIndex;
     }
 
+    public int getTreasuresCollected() {
+        return treasuresCollected;
+    }
+
     public void moveForward() {
         int newX = x;
         int newY = y;

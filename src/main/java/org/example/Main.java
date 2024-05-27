@@ -13,11 +13,21 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        String inputFilePath = "./input.txt";
-        String outputFilePath = "./output.txt";
+        String inputFilePath;
+        String outputFilePath;
+
+        if (args.length >= 2) {
+            inputFilePath = args[0];
+            outputFilePath = args[1];
+        } else {
+            inputFilePath = "./input.txt";
+            outputFilePath = "./output.txt";
+        }
+
         List<Object> mapObjects = new ArrayList<>();
         List<Mountain> mountains = new ArrayList<>();
         List<Treasure> treasures = new ArrayList<>();
+        List<Adventurer> adventurers = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath))) {
             String line;
@@ -43,11 +53,15 @@ public class Main {
                         mapObjects.add(treasure);
                         break;
                     case "A":
-                        Object firstObject = mapObjects.get(0);
-                        if (firstObject instanceof TreasureMap) {
-                            mapObjects.add(parseAdventurer(tokens, mountains, treasures, (TreasureMap) firstObject));
+                        if (mapObjects.isEmpty() || !(mapObjects.get(0) instanceof TreasureMap)) {
+                            System.err.println("Invalid input: The first object must be a TreasureMap.");
                         } else {
-                            System.err.println("Invalid input: " + firstObject + " must be a map");
+                            TreasureMap treasureMap = (TreasureMap) mapObjects.get(0);
+                            Adventurer adventurer = parseAdventurer(tokens, mountains, treasures, treasureMap);
+                            if (adventurer != null) {
+                                adventurers.add(adventurer);
+                                mapObjects.add(adventurer);
+                            }
                         }
                         break;
                     default:
@@ -55,11 +69,26 @@ public class Main {
                 }
             }
 
+            executeMovementsTurnByTurn(adventurers);
+
             writeOutput(outputFilePath, mapObjects);
 
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void executeMovementsTurnByTurn(List<Adventurer> adventurers) {
+        boolean anyAdventurerHasMoves;
+        do {
+            anyAdventurerHasMoves = false;
+            for (Adventurer adventurer : adventurers) {
+                if (!adventurer.hasFinishedSequence()) {
+                    adventurer.executeNextMovement();
+                    anyAdventurerHasMoves = true;
+                }
+            }
+        } while (anyAdventurerHasMoves);
     }
 
     private static TreasureMap parseMap(String[] tokens) {
@@ -87,13 +116,18 @@ public class Main {
         int adventurerY = Integer.parseInt(tokens[3].trim());
         String orientation = tokens[4].trim();
         String movementSequence = tokens[5].trim();
+
+        if (!treasureMap.isValidMove(adventurerX, adventurerY) ||
+                mountains.stream().anyMatch(m -> m.getX() == adventurerX && m.getY() == adventurerY)) {
+            System.err.printf("Invalid starting position for adventurer %s at (%d, %d)%n", adventurerName, adventurerX, adventurerY);
+            return null;
+        }
+
         ObstacleDetector obstacleDetector = new MountainObstacleDetector(mountains);
         TreasureManager treasureManager = new SimpleTreasureManager(treasures);
         Adventurer adventurer = new Adventurer(adventurerName, adventurerX, adventurerY, orientation,
                 movementSequence, obstacleDetector, treasureManager, treasureMap);
-        while (!adventurer.hasFinishedSequence()) {
-            adventurer.executeNextMovement();
-        }
+
         return adventurer;
     }
 
