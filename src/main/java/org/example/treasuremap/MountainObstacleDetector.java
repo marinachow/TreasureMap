@@ -3,28 +3,28 @@ package org.example.treasuremap;
 import java.util.List;
 
 public class MountainObstacleDetector implements ObstacleDetector {
-    private List<Mountain> mountains;
+    private final List<Mountain> mountains;
 
     public MountainObstacleDetector(List<Mountain> mountains) {
         this.mountains = mountains;
     }
 
     @Override
-    public boolean hasObstacleAhead(int x, int y, String orientation) {
+    public boolean hasObstacleAhead(int x, int y, Orientation orientation) {
         int nextX = x;
         int nextY = y;
 
         switch (orientation) {
-            case "N":
+            case NORTH:
                 nextY -= 1;
                 break;
-            case "S":
+            case SOUTH:
                 nextY += 1;
                 break;
-            case "E":
+            case EAST:
                 nextX += 1;
                 break;
-            case "W":
+            case WEST:
                 nextX -= 1;
                 break;
         }

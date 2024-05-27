@@ -54,7 +54,7 @@ public class IntegrationTest {
             T - 2 - 2 - 1
             T - 4 - 4 - 2
             A - Lara - 0 - 0 - E - AADAADAD
-            A - John - 4 - 4 - W - AAGGAAGGA
+            A - John - 4 - 4 - O - AAGGAAGGA
             """;
         Files.writeString(inputFilePath, inputData);
 
@@ -67,7 +67,7 @@ public class IntegrationTest {
                 "M - 3 - 3",
                 "T - 4 - 4 - 1",
                 "A - Lara - 1 - 2 - N - 1",
-                "A - John - 3 - 4 - W - 1"
+                "A - John - 3 - 4 - O - 1"
         );
 
         assertEquals(expectedLines, outputLines);
@@ -83,7 +83,7 @@ public class IntegrationTest {
         List<Mountain> mountains = new ArrayList<>();
         mountains.add(mountain);
 
-        Adventurer adventurer = new Adventurer("John", 0, 0, "S", "A", new MountainObstacleDetector(mountains), null, treasureMap);
+        Adventurer adventurer = new Adventurer("John", 0, 0, Orientation.SOUTH, "A", new MountainObstacleDetector(mountains), null, treasureMap);
 
         adventurer.executeNextMovement();
 

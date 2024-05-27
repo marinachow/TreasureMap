@@ -2,7 +2,7 @@ package org.example.treasuremap;
 
 public class Adventurer extends MapObject {
     private final String name;
-    private String orientation;
+    private Orientation orientation;
     private final String sequence;
     private int treasuresCollected;
     private int sequenceIndex;
@@ -10,7 +10,7 @@ public class Adventurer extends MapObject {
     private final TreasureManager treasureManager;
     private final TreasureMap treasureMap;
 
-    public Adventurer(String name, int x, int y, String orientation, String sequence,
+    public Adventurer(String name, int x, int y, Orientation orientation, String sequence,
                       ObstacleDetector obstacleDetector, TreasureManager treasureManager, TreasureMap treasureMap) {
         super(x, y);
         this.name = name;
@@ -35,7 +35,7 @@ public class Adventurer extends MapObject {
         return y;
     }
 
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
@@ -56,16 +56,16 @@ public class Adventurer extends MapObject {
         int newY = y;
 
         switch (orientation) {
-            case "N":
+            case NORTH:
                 newY -= 1;
                 break;
-            case "S":
+            case SOUTH:
                 newY += 1;
                 break;
-            case "E":
+            case EAST:
                 newX += 1;
                 break;
-            case "W":
+            case WEST:
                 newX -= 1;
                 break;
         }
@@ -84,34 +84,34 @@ public class Adventurer extends MapObject {
 
     public void turnLeft() {
         switch (orientation) {
-            case "N":
-                orientation = "W";
+            case NORTH:
+                orientation = Orientation.WEST;
                 break;
-            case "S":
-                orientation = "E";
+            case SOUTH:
+                orientation = Orientation.EAST;
                 break;
-            case "E":
-                orientation = "N";
+            case EAST:
+                orientation = Orientation.NORTH;
                 break;
-            case "W":
-                orientation = "S";
+            case WEST:
+                orientation = Orientation.SOUTH;
                 break;
         }
     }
 
     public void turnRight() {
         switch (orientation) {
-            case "N":
-                orientation = "E";
+            case NORTH:
+                orientation = Orientation.EAST;
                 break;
-            case "S":
-                orientation = "W";
+            case SOUTH:
+                orientation = Orientation.WEST;
                 break;
-            case "E":
-                orientation = "S";
+            case EAST:
+                orientation = Orientation.SOUTH;
                 break;
-            case "W":
-                orientation = "N";
+            case WEST:
+                orientation = Orientation.NORTH;
                 break;
         }
     }

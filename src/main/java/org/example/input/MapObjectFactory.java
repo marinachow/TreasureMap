@@ -39,7 +39,7 @@ public class MapObjectFactory {
         String adventurerName = tokens[1].trim();
         int adventurerX = Integer.parseInt(tokens[2].trim());
         int adventurerY = Integer.parseInt(tokens[3].trim());
-        String orientation = tokens[4].trim();
+        Orientation orientation = Orientation.fromCode(tokens[4]);
         String movementSequence = tokens[5].trim();
 
         if (!treasureMap.isValidMove(adventurerX, adventurerY) ||
